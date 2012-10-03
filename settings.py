@@ -1,4 +1,5 @@
 import os
+import sys
 
 # App configuration (see README for details)
 # You will need to change these
@@ -15,8 +16,15 @@ HV_SERVICE_SERVER = 'platform.healthvault-ppe.com'
 
 # django configuration
 #############################################################################
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-ROOT_URLCONF = 'smart_hv_django.urls'
+git_sub_modules = BASE_DIR+'/healthvault' #Relative paths ok too
+for dir in os.listdir(git_sub_modules):
+    path = os.path.join(git_sub_modules, dir)
+    if not path in sys.path:
+        sys.path.append(path)
+
+ROOT_URLCONF = 'urls'
 TEMPLATE_DIRS = (BASE_DIR+'/webapp')
 
 DEBUG = True

@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
-from pyhv.hv import HVConn
+from healthvault import HVConn
 from settings import *
 
 def index(request):
