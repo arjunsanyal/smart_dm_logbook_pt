@@ -1,0 +1,3 @@
+[submodule "healthvault"]
+	path = healthvault
+	url = git@github.com:arjunsanyal/healthvault_py.git
