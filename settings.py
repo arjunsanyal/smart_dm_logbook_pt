@@ -18,14 +18,14 @@ HV_SERVICE_SERVER = 'platform.healthvault-ppe.com'
 #############################################################################
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-git_sub_modules = BASE_DIR+'/healthvault' #Relative paths ok too
+git_sub_modules = BASE_DIR+'/healthvault' # Relative paths ok too
 for dir in os.listdir(git_sub_modules):
     path = os.path.join(git_sub_modules, dir)
     if not path in sys.path:
         sys.path.append(path)
 
 ROOT_URLCONF = 'urls'
-TEMPLATE_DIRS = (BASE_DIR+'/webapp')
+TEMPLATE_DIRS = (BASE_DIR+'/app')
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
