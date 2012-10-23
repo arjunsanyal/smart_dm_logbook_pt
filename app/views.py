@@ -26,7 +26,7 @@ def mvaultaction(request):
     if target == "Home":
         return HttpResponseRedirect('/')
     if target == "AppAuthSuccess":
-        return HttpResponseRedirect('/start?' + \
+        return HttpResponseRedirect('/main?' + \
                 request.META['QUERY_STRING'])
     if target == "ServiceAgreement":
         return HttpResponseRedirect('/YouAPPTermsOfService.html')
@@ -46,7 +46,7 @@ def mvaultaction(request):
         return HttpResponseRedirect('/')
     return HttpResponse('')
 
-def start(request):
+def main(request):
     target = request.GET['target']
     wctoken = ""
     if target == "AppAuthSuccess":
@@ -64,5 +64,5 @@ def start(request):
         'name': hvconn.person.name,
         'weights': hvconn.person.weights
     }
-    return render_to_response('start.html', template_values)
+    return render_to_response('main.html', template_values)
 
