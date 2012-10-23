@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect
 from healthvault import HVConn
 from settings import *
+import json
 
 def index(request):
     """ Redirect to the HealthVault login which on completion of a
@@ -55,14 +56,20 @@ def main(request):
         return HttpResponse("cannot get wctoken")
 
     hvconn = HVConn(wctoken)
-    hvconn.getPersonInfo()
-    hvconn.getWeightMeasurements()
 
-    #import pdb; pdb.set_trace()
-
-    template_values = {
-        'name': hvconn.person.name,
-        'weights': hvconn.person.weights
-    }
+    template_values = { 'wctoken': wctoken }
     return render_to_response('main.html', template_values)
 
+def getPersonInfo(request):
+    hvconn = HVConn(request.GET['wctoken'])
+    hvconn.getPersonInfo()
+    res = {'name': hvconn.person.name }
+    return HttpResponse(json.dumps(res), mimetype='application/json')
+    pass
+
+def getWeightMeasurements(request):
+    hvconn = HVConn(request.GET['wctoken'])
+    hvconn.getWeightMeasurements()
+    res = hvconn.person.weights
+    return HttpResponse(json.dumps(res), mimetype='application/json')
+    pass

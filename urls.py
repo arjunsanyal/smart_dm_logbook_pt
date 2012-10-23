@@ -5,6 +5,10 @@ urlpatterns = patterns('',
     (r'^$', 'app.views.index'),
     (r'^mvaultaction/$', 'app.views.mvaultaction'),
     (r'^main/$', 'app.views.main'),
+    (r'^getPersonInfo/$', 'app.views.getPersonInfo'),
+    (r'^getWeightMeasurements/$', 'app.views.getWeightMeasurements'),
+
+    # static routes
     (r'^main/css/(?P<path>.*)$', 'django.views.static.serve', {
         'document_root': settings.BASE_DIR + '/app/css/'
     }),
