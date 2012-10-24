@@ -1,30 +1,20 @@
-/* app css stylesheet */
 
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+/* D3 bar chart CSS */
+body {
+  font: 10px sans-serif;
 }
 
-.menu:before {
-  content: "[";
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
 }
 
-.menu:after {
-  content: "]";
+.bar {
+  fill: steelblue;
 }
 
-.menu > li {
-  display: inline;
-}
-
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
-}
-
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
+.x.axis path {
+  display: none;
 }
