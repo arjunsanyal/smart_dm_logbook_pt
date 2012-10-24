@@ -9,16 +9,16 @@
 
   <div ng-controller="Controller">
     <center><h2>Hello {[{name}]}!</h2></center>
-    <gh-vis val='weights'></gh-vis>
+    <glucose-day val='glucoses'></glucose-day>
+  <div>
+    <ul>
+      <li ng-repeat="glucose in glucoses">
+        {[{ glucose.when }]} {[{ glucose.value }]} mmol/L
+      </li>
+    </ul>
+  </div>
   </div>
 
-  <!--<div>-->
-    <!--<ul>-->
-      <!--<li ng-repeat="weight in weights">-->
-        <!--{[{ weight.day }]} &middot; {[{ weight.count }]}-->
-      <!--</li>-->
-    <!--</ul>-->
-  <!--</div>-->
 
 
   <!-- FIXME: hackish passing of wctoken from django to angular -->

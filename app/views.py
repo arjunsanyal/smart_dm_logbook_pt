@@ -65,11 +65,15 @@ def getPersonInfo(request):
     hvconn.getPersonInfo()
     res = {'name': hvconn.person.name }
     return HttpResponse(json.dumps(res), mimetype='application/json')
-    pass
 
 def getWeightMeasurements(request):
     hvconn = HVConn(request.GET['wctoken'])
     hvconn.getWeightMeasurements()
     res = hvconn.person.weights
     return HttpResponse(json.dumps(res), mimetype='application/json')
-    pass
+
+def getGlucoseMeasurements(request):
+    hvconn = HVConn(request.GET['wctoken'])
+    hvconn.getGlucoseMeasurements()
+    res = hvconn.person.glucoses
+    return HttpResponse(json.dumps(res), mimetype='application/json')

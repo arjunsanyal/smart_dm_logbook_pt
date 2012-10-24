@@ -7,6 +7,7 @@ urlpatterns = patterns('',
     (r'^main/$', 'app.views.main'),
     (r'^getPersonInfo/$', 'app.views.getPersonInfo'),
     (r'^getWeightMeasurements/$', 'app.views.getWeightMeasurements'),
+    (r'^getGlucoseMeasurements/$', 'app.views.getGlucoseMeasurements'),
 
     # static routes
     (r'^main/css/(?P<path>.*)$', 'django.views.static.serve', {
