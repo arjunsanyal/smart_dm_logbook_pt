@@ -13,7 +13,9 @@ angular.module('App.directives', [])
         function getDate(d) { return new Date(d); }
         function getHour(d) {
           var x = new Date(d)
-          return x.getHours();
+          // dates are in UTC, translate to local time
+          var m = x.getTimezoneOffset
+          return x.getHours() + x.getTimezoneOffset() / 60;
         }
 
         var margin = {top: 20, right: 20, bottom: 30, left: 40},
