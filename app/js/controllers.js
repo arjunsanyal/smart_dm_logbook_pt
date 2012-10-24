@@ -1,7 +1,7 @@
 'use strict';
 
 function Controller($scope, $http) {
-  var debug = true;
+  var debug = false;
   if (debug) {
     $scope.name = 'Arjun Sanyal';
     // todo: add glu mes type, normalcy, context
@@ -32,7 +32,14 @@ function Controller($scope, $http) {
            .error(function(data, status) { alert('error in getPersonInfo'); })
 
       $http.get('/getGlucoseMeasurements', {params: $scope.params})
-           .success(function(data) { $scope.glucoses = data; })
+           .success(function(data) {
+             // todo: have a consistent standard for this array or {}}?
+             var glucoses = [];
+             data.forEach(function(d) {
+               glucoses.push({'when': d[0], 'value': d[1]});
+             })
+             $scope.glucoses = glucoses;
+           })
            .error(function(data, status) { alert('error in getGlucoseMeasurements'); })
   }
 };

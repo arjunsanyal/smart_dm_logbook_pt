@@ -92,7 +92,6 @@ angular.module('App.directives', [])
           }
         }
 
-        //console.log(x_domain);
         var x = d3.scale.ordinal().domain(x_domain).rangeRoundBands([0, width], .1);
         var y = d3.scale.linear().range([height, 0]);
         var color = d3.scale.category10();
@@ -123,8 +122,6 @@ angular.module('App.directives', [])
             }
             if (!found) { counts.push([d.value, 1]); }
           });
-
-          console.log(counts);
 
           // set the y domain after we have the data to auto scale
           y.domain([0, d3.max(counts, function(d) { return d[1]; })]).nice();
