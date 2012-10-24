@@ -57,7 +57,10 @@ def main(request):
 
     hvconn = HVConn(wctoken)
 
-    template_values = { 'wctoken': wctoken }
+    template_values = {
+        'wctoken': wctoken,
+        'name': hvconn.person.name
+    }
     return render_to_response('main.html', template_values)
 
 def getPersonInfo(request):

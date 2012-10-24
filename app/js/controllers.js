@@ -25,12 +25,8 @@ function Controller($scope, $http) {
           {'when': '2012-10-16T18:04:11', 'value': 7.9},
         ]
     } else {
-      // get info (in JSON)
       $scope.params = {'wctoken': window.WCTOKEN};
-      $http.get('/getPersonInfo', {params: $scope.params})
-           .success(function(data) { $scope.name = data.name; })
-           .error(function(data, status) { alert('error in getPersonInfo'); })
-
+      $scope.name = window.NAME;
       $http.get('/getGlucoseMeasurements', {params: $scope.params})
            .success(function(data) {
              // todo: have a consistent standard for this array or {}}?
