@@ -92,13 +92,12 @@ angular.module('App.directives', [])
           //}
         }
 
-        // var x = d3.scale.ordinal().domain(x_domain).rangeRoundBands([0, width], .1);
         var x = d3.scale.quantize().domain(x_domain).range(x_domain);
         var y = d3.scale.linear().range([height, 0]);
         var color = d3.scale.category10();
         var yAxis = d3.svg.axis().scale(y).orient("left");
-        // aks hack for xAxis
-        var x_scale_hack = d3.scale.linear().range([0, width]);
+        // aks hack for xAxis: NOTE: don't use .domain(x_domain) here!
+        var x_scale_hack = d3.scale.linear().domain([4,14]).range([0, 960]);
         var xAxis = d3.svg.axis().scale(x_scale_hack).orient("bottom").tickValues(x_domain);
 
         var svg = d3.select(element[0]).append("svg")
@@ -129,6 +128,11 @@ angular.module('App.directives', [])
           // set the y domain after we have the data to auto scale
           y.domain([0, d3.max(counts, function(d) { return d[1]; })]).nice();
 
+          //counts.forEach(function(d) {
+            //console.log('input: ', d, 'output: ', x(d[0]));
+            //console.log(x(d[0])*90-90);
+          //});
+
           svg.append("g")
               .attr("class", "x axis")
               .attr("transform", "translate(0," + height + ")")
@@ -136,7 +140,7 @@ angular.module('App.directives', [])
             .append("text")
               .attr("class", "label")
               .attr("x", width)
-              .attr("y", 12)
+              .attr("y", -6)
               .style("text-anchor", "end")
               .text("Glucose (mmol/L)");
 
@@ -151,17 +155,13 @@ angular.module('App.directives', [])
                   .style("text-anchor", "end")
                   .text("Number of Measurements")
 
-            //counts.forEach(function(d) {
-              //console.log(d);
-              //console.log(x(d[0])*90-90);
-           //});
-
             svg.selectAll(".bar")
                 .data(counts)
               .enter().append("rect")
                 .attr("class", "bar")
                 .attr("width", 90)
-                .attr("x", function(d) { return (x(d[0]) * 90 - 90); })
+                // todo: clean up this adjustment
+                .attr("x", function(d) { return (x(d[0]) * 90 - (360 + 30)); })
                 .attr("y", function(d) { return y(d[1]); })
                 .attr("height", function(d) { return height - y(d[1]); });
         });
