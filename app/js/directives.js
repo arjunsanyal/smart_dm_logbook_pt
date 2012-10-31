@@ -87,16 +87,19 @@ angular.module('App.directives', [])
         var x_domain = [];
         for (var i = 4; i < 15; i += 1) {
           x_domain.push(i);
-          for (var j = 0; j < 11; j += 1) {
-            x_domain.push(i+j/10);
-          }
+          //for (var j = 0; j < 11; j += 1) {
+            //x_domain.push(i+j/10);
+          //}
         }
 
-        var x = d3.scale.ordinal().domain(x_domain).rangeRoundBands([0, width], .1);
+        // var x = d3.scale.ordinal().domain(x_domain).rangeRoundBands([0, width], .1);
+        var x = d3.scale.quantize().domain(x_domain).range(x_domain);
         var y = d3.scale.linear().range([height, 0]);
         var color = d3.scale.category10();
-        var xAxis = d3.svg.axis().scale(x).orient("bottom").ticks(10);
         var yAxis = d3.svg.axis().scale(y).orient("left");
+        // aks hack for xAxis
+        var x_scale_hack = d3.scale.linear().range([0, width]);
+        var xAxis = d3.svg.axis().scale(x_scale_hack).orient("bottom").tickValues(x_domain);
 
         var svg = d3.select(element[0]).append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -133,7 +136,7 @@ angular.module('App.directives', [])
             .append("text")
               .attr("class", "label")
               .attr("x", width)
-              .attr("y", -6)
+              .attr("y", 12)
               .style("text-anchor", "end")
               .text("Glucose (mmol/L)");
 
@@ -148,12 +151,17 @@ angular.module('App.directives', [])
                   .style("text-anchor", "end")
                   .text("Number of Measurements")
 
+            //counts.forEach(function(d) {
+              //console.log(d);
+              //console.log(x(d[0])*90-90);
+           //});
+
             svg.selectAll(".bar")
                 .data(counts)
               .enter().append("rect")
                 .attr("class", "bar")
-                .attr("width", x.rangeBand())
-                .attr("x", function(d) { return x(d[0]); })
+                .attr("width", 90)
+                .attr("x", function(d) { return (x(d[0]) * 90 - 90); })
                 .attr("y", function(d) { return y(d[1]); })
                 .attr("height", function(d) { return height - y(d[1]); });
         });

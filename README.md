@@ -10,15 +10,23 @@ project.
 
 FIXME: update this
 
+- Requires the `healthvault.py` library as a submodule
 - Uses the [AngularJS](http://angularjs.org) framework for client-side interaction
 - Uses the [D3.js](http://d3js.org) manipulation and visulation library
 - Uses the Django python-based web framwork (version 1.1)
 
 ## To Run
 
-    $ python manage.py runserver
+We're running it on port 9000, but you can change this in `settings.py`
+at the `APP_ACTION_URL`
 
-Go to <http://localhost:8000>
+    $ python manage.py runserver 9000
+
+Go to <http://localhost:9000>
+
+## TODO
+
+- Local caching of glucose results
 
 
 ---

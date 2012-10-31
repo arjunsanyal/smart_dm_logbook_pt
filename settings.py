@@ -10,7 +10,7 @@ APP_PRIVATE_KEY = '0x00cb3f2f3f1fa7927936c366fcecb5c2479f0f4949b7f849433239409e8
 
 # probably won't need to change these for development
 # todo: should we not be encoding here?
-APP_ACTION_URL = 'http://localhost:8000/mvaultaction'
+APP_ACTION_URL = 'http://localhost:9000/mvaultaction'
 HV_SHELL_URL = 'https://account.healthvault-ppe.com'
 HV_SERVICE_SERVER = 'platform.healthvault-ppe.com'
 

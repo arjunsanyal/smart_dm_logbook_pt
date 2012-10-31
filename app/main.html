@@ -20,6 +20,54 @@
       <glucose-histogram val='glucoses'></glucose-histogram>
     </div>
 
+    <!--<h3>Add a New Glucose Measurement</h3>-->
+    <!--<form name="form" class="css-form" novalidate>-->
+      <!--Date:-->
+      <!--<input type='number' ng-model='measurement.month' name='mMonth'-->
+      <!--min='1' max='12' integer />-->
+      <!----->
+      <!--<input type='number' ng-model='measurement.day' name='mDay'-->
+      <!--min='1' max='31' integer />-->
+      <!----->
+      <!--<input type='number' ng-model='measurement.year' name='mYear'-->
+      <!--min='2000' max='2013' integer />-->
+
+      <!--&nbsp;-->
+      <!--&nbsp;-->
+      <!--&nbsp;-->
+
+      <!--Time:-->
+      <!--<input type='number' ng-model='measurement.hour12' name='mHour12'-->
+      <!--min='1' max='12' integer />-->
+      <!--:-->
+      <!--<input type='number' ng-model='measurement.minute' name='mMinute'-->
+      <!--min='0' max='59' integer />-->
+
+      <!--<input type="radio" ng-model="measurement.am_pm" value="am" checked/> am-->
+      <!--<input type="radio" ng-model="measurement.am_pm" value="pm" /> pm-->
+
+      <!--Value:-->
+      <!-- fixme: use smart-float here: http://docs.angularjs.org/guide/forms -->
+      <!--<input type='number' ng-model='measurement.value' name='mValue' min='0' max='500' integer />-->
+      <!--&nbsp;-->
+      <!--<input type="radio" ng-model="measurement.unit" value="mg_dl" checked/>mg/dL<br />-->
+      <!--<input type="radio" ng-model="measurement.unit" value="mmol_per_l" />mmol/L-->
+      <!--&nbsp;-->
+      <!--<input type="radio" ng-model="measurement.type" value="whole_blood" checked/>whole blood-->
+      <!--<input type="radio" ng-model="measurement.type" value="plasma" />plasma<br />-->
+      <!--<br>-->
+      <!--Note:-->
+      <!--<input type="textarea" ng-model="measurement.note" name="mNote"/>-->
+
+      <!--<br />-->
+      <!--<br />-->
+
+      <!--<button ng-click="reset()" ng-disabled="isUnchanged(user)">Reset Form</button>-->
+      <!--<button ng-click="update(user)"-->
+              <!--ng-disabled="form.$invalid || isUnchanged(user)">Save Measurement</button>-->
+    <!--</form>-->
+
+    <h3>Previous Measurements</h3>
     <div>
       <ul>
         <li ng-repeat="glucose in glucoses">
@@ -36,7 +84,7 @@
   <script> window.NAME = '{{name}}' </script>
 
   <script src="lib/angular/angular.js"></script>
-  <script src="lib/d3.v3.js"></script>
+  <script src="lib/d3.v2.js"></script>
   <script src="js/app.js"></script>
   <script src="js/controllers.js"></script>
   <script src="js/directives.js"></script>
