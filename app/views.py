@@ -3,7 +3,9 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect
 from healthvault import HVConn
 from settings import *
+import datetime
 import json
+import pdb
 
 def index(request):
     """ Redirect to the HealthVault login which on completion of a
@@ -80,3 +82,23 @@ def getGlucoseMeasurements(request):
     hvconn.getGlucoseMeasurements()
     res = hvconn.person.glucoses
     return HttpResponse(json.dumps(res), mimetype='application/json')
+
+def newGlucoseMeasurement(request):
+    params = json.loads(request.raw_post_data)
+    hvconn = HVConn(params['wctoken'])
+    dt = datetime.datetime(
+            params['year'],
+            params['month'],
+            params['day'],
+            params['hours24'],
+            params['minutes'],
+            0)
+
+    # convert mg_dl to mmolPerL
+    if params['unit'] == 'mg_dl':
+        value = params['value'] / 18
+    else:
+        value = params['value']
+
+    hvconn.newGlucoseMeasurement(dt, value, params['whole_or_plasma'])
+    return HttpResponse(json.dumps('ok'), mimetype='application/json')

@@ -12,16 +12,16 @@
     <center><h1>{[{name}]}'s Glucose Logbook</h1></center>
 
     <h3>Enter a New Measurement</h3>
-    <form name="new_meas_form" class="css-form" novalidate>
+    <form name="form" class="css-form" novalidate>
       Date:
       <input type='number' ng-model='meas.month' name='meas_month' min='1' max='12' size='2' integer />
       -
       <input type='number' ng-model='meas.day' name='meas_day' min='1' max='31' size='2' integer />
       -
       <input type='number' ng-model='meas.year' name='meas_year' min='2010' max='2013' size='4' integer />
-      
+
       <br>
-      
+
       Time:
       <input type='number' ng-model='meas.hours' name='meas_hours' min='1' max='12' size='2' integer />
       :
@@ -34,46 +34,46 @@
 
       Value:
       <!-- using smart-float see angular forms docs -->
-      <input autofocus id='meas_value' type='number' ng-model='meas.value' min='0' max='500' smart-float />
+      <input autofocus id='meas_value' type='number' ng-model='meas.value' min='0' max='500' smart-float required />
       &nbsp;
       &nbsp;
       Unit:
       &nbsp;
-      <input name='unit' type="radio" ng-model="meas.unit" value="mg_dl" /> mg/dL
+      <input name='unit' type="radio" ng-model="meas.unit" value="mmol_per_l" /> mmol/L
       &nbsp;
       or
       &nbsp;
-      <input name='unit' type="radio" ng-model="meas.unit" value="mmol_per_l" /> mmol/L
-      &nbsp;
-      Type:
-      &nbsp;
-      <input name='whole_or_plasma' type="radio" ng-model="meas.whole_or_plasma" value="whole" /> whole blood
-      &nbsp;
-      <input name="whole_or_plasma" type="radio" ng-model="meas.whole_or_plasma" value="plasma" /> plasma
+      <input name='unit' type="radio" ng-model="meas.unit" value="mg_dl" /> mg/dL
+      <!--&nbsp;-->
+      <!--Type:-->
+      <!--&nbsp;-->
+      <!--<input name='whole_or_plasma' type="radio" ng-model="meas.whole_or_plasma" value="whole" /> whole blood-->
+      <!--&nbsp;-->
+      <!--<input name="whole_or_plasma" type="radio" ng-model="meas.whole_or_plasma" value="plasma" /> plasma-->
 
       <br />
       <br />
 
       <button ng-click="update(meas)"
-              ng-disabled="form.$invalid || isUnchanged(meas)">Save Measurement</button>
-      <button ng-click="reset()" ng-disabled="isUnchanged(meas)">Reset Form</button>
+              ng-disabled="form.$invalid || is_unchanged(meas)">Save Measurement</button>
+      <button ng-click="reset()" ng-disabled="is_unchanged(meas)">Reset Form</button>
     </form>
 
     <hr>
 
     <h3>Glucose by Time of Day</h3>
-    <div><glucose-day val='glucoses'></glucose-day></div>
+    <div class='whitebg'><glucose-day val='glucoses'></glucose-day></div>
 
     <hr>
 
     <h3>Glucose Histogram</h3>
-    <div><glucose-histogram val='glucoses'></glucose-histogram></div>
+    <div class='whitebg'><glucose-histogram val='glucoses'></glucose-histogram></div>
 
 
     <h3>Previous Measurements</h3>
     <div>
       <ul>
-        <li ng-repeat="glucose in glucoses"><code>{[{ glucose.when }]} {[{ glucose.value }]} mmol/L</code></li>
+        <li ng-repeat="glucose in glucoses"><code>{[{ glucose.when }]} &mdash; {[{ glucose.value }]} mmol/L</code></li>
       </ul>
     </div>
   </div>

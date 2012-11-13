@@ -1,11 +1,60 @@
 'use strict';
 
 function Controller($scope, $http) {
-  var debug = true;
-  if (debug) {
-    $scope.name = 'Arjun Sanyal';
-    // todo: add glu mes type, normalcy, context
-    // values below in mmolPerL
+  $scope.DEBUG = false;
+
+  // form functions
+  $scope.master = {};
+
+  $scope.update = function(measurement) {
+    $scope.master = angular.copy(measurement);
+    measurement['wctoken'] = window.WCTOKEN;
+    $http.post('/newGlucoseMeasurement', measurement)
+      .success(function(data) {
+        // FIXME: slow as hell
+        $scope.get_glucoses();
+      })
+  };
+
+  $scope.is_unchanged = function(measurement) {
+    return angular.equals(measurement, $scope.master);
+  }
+
+  $scope.reset = function() {
+    var d = new Date();
+    $scope.meas = {
+      'month': d.getMonth(),
+      'day': d.getDate(),
+      'year': d.getFullYear(),
+      'hours24': d.getHours(),
+      'hours': d.getHours() > 12 ? d.getHours() - 12 : d.getHours(),
+      'am_or_pm': d.getHours() > 12 ? 'pm' : 'am',
+      'minutes': d.getMinutes(),
+      '12_hour_p': true,
+      'unit': 'mmol_per_l',
+      'whole_or_plasma': 'whole',
+      'value': $scope.DEBUG ? 7.5 : null,
+    };
+  };
+
+  $scope.get_glucoses = function() {
+    $http.get('/getGlucoseMeasurements', {params: $scope.params})
+          .success(function(data) {
+            // todo: have a consistent standard for this array or {}}?
+            var glucoses = [];
+            data.forEach(function(d) {
+              glucoses.push({'when': d[0], 'value': d[1]});
+            })
+            $scope.glucoses = glucoses;
+          })
+          .error(function(data, status) { alert('error in getGlucoseMeasurements'); })
+  }
+
+  // main init
+  $scope.params = {'wctoken': window.WCTOKEN};
+  $scope.name = window.NAME;
+
+  if ($scope.DEBUG) {
     $scope.glucoses = [
           {'when': '2012-10-23T08:04:11', 'value': 6.5},
           {'when': '2012-10-23T18:04:11', 'value': 7.9},
@@ -25,41 +74,10 @@ function Controller($scope, $http) {
           {'when': '2012-10-16T18:04:11', 'value': 7.9},
         ]
     } else {
-      $scope.params = {'wctoken': window.WCTOKEN};
-      $scope.name = window.NAME;
-      $http.get('/getGlucoseMeasurements', {params: $scope.params})
-           .success(function(data) {
-             // todo: have a consistent standard for this array or {}}?
-             var glucoses = [];
-             data.forEach(function(d) {
-               glucoses.push({'when': d[0], 'value': d[1]});
-             })
-             $scope.glucoses = glucoses;
-           })
-           .error(function(data, status) { alert('error in getGlucoseMeasurements'); })
-  }
+      $scope.get_glucoses();
+    }
 
-  // reset form 
-  $scope.reset = function() {
-    var d = new Date();
-    $scope.meas = {
-      'month': d.getMonth(),
-      'day': d.getDate(),
-      'year': d.getFullYear(),
-      'hours24': d.getHours(),
-      'hours': d.getHours() > 12 ? d.getHours() - 12 : d.getHours(),
-      'am_or_pm': d.getHours() > 12 ? 'pm' : 'am',
-      'minutes': d.getMinutes(),
-      '12_hour_p': true,
-      'value': null,
-      'unit': 'mg_dl',
-      'whole_or_plasma': 'whole'
-    };
-  };
-
-
-  // do init
   $scope.reset();
-
 };
+
 Controller.$inject = ['$scope', '$http'];
