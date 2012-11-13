@@ -3,80 +3,80 @@
 <head>
   <meta charset="utf-8">
   <title>Your Glucose Tracker</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css"/>
   <link rel="stylesheet" href="css/app.css"/>
 </head>
 <body>
 
   <div ng-controller="Controller">
-    <center><h2>Hello {[{name}]}!</h2></center>
+    <center><h1>{[{name}]}'s Glucose Logbook</h1></center>
+
+    <h3>Enter a New Measurement</h3>
+    <form name="new_meas_form" class="css-form" novalidate>
+      Date:
+      <input type='number' ng-model='meas.month' name='meas_month' min='1' max='12' size='2' integer />
+      -
+      <input type='number' ng-model='meas.day' name='meas_day' min='1' max='31' size='2' integer />
+      -
+      <input type='number' ng-model='meas.year' name='meas_year' min='2010' max='2013' size='4' integer />
+      
+      <br>
+      
+      Time:
+      <input type='number' ng-model='meas.hours' name='meas_hours' min='1' max='12' size='2' integer />
+      :
+      <input type='number' ng-model='meas.minutes' name='meas_minutes' min='0' max='59' size='2' integer />
+
+      <input name='am_or_pm' type="radio" ng-model="meas.am_or_pm" value="am" /> am
+      <input name='am_or_pm' type="radio" ng-model="meas.am_or_pm" value="pm" /> pm
+
+      <br />
+
+      Value:
+      <!-- using smart-float see angular forms docs -->
+      <input autofocus id='meas_value' type='number' ng-model='meas.value' min='0' max='500' smart-float />
+      &nbsp;
+      &nbsp;
+      Unit:
+      &nbsp;
+      <input name='unit' type="radio" ng-model="meas.unit" value="mg_dl" /> mg/dL
+      &nbsp;
+      or
+      &nbsp;
+      <input name='unit' type="radio" ng-model="meas.unit" value="mmol_per_l" /> mmol/L
+      &nbsp;
+      Type:
+      &nbsp;
+      <input name='whole_or_plasma' type="radio" ng-model="meas.whole_or_plasma" value="whole" /> whole blood
+      &nbsp;
+      <input name="whole_or_plasma" type="radio" ng-model="meas.whole_or_plasma" value="plasma" /> plasma
+
+      <br />
+      <br />
+
+      <button ng-click="update(meas)"
+              ng-disabled="form.$invalid || isUnchanged(meas)">Save Measurement</button>
+      <button ng-click="reset()" ng-disabled="isUnchanged(meas)">Reset Form</button>
+    </form>
+
+    <hr>
 
     <h3>Glucose by Time of Day</h3>
-    <div>
-      <glucose-day val='glucoses'></glucose-day>
-    </div>
+    <div><glucose-day val='glucoses'></glucose-day></div>
+
+    <hr>
 
     <h3>Glucose Histogram</h3>
-    <div>
-      <glucose-histogram val='glucoses'></glucose-histogram>
-    </div>
+    <div><glucose-histogram val='glucoses'></glucose-histogram></div>
 
-    <!--<h3>Add a New Glucose Measurement</h3>-->
-    <!--<form name="form" class="css-form" novalidate>-->
-      <!--Date:-->
-      <!--<input type='number' ng-model='measurement.month' name='mMonth'-->
-      <!--min='1' max='12' integer />-->
-      <!----->
-      <!--<input type='number' ng-model='measurement.day' name='mDay'-->
-      <!--min='1' max='31' integer />-->
-      <!----->
-      <!--<input type='number' ng-model='measurement.year' name='mYear'-->
-      <!--min='2000' max='2013' integer />-->
-
-      <!--&nbsp;-->
-      <!--&nbsp;-->
-      <!--&nbsp;-->
-
-      <!--Time:-->
-      <!--<input type='number' ng-model='measurement.hour12' name='mHour12'-->
-      <!--min='1' max='12' integer />-->
-      <!--:-->
-      <!--<input type='number' ng-model='measurement.minute' name='mMinute'-->
-      <!--min='0' max='59' integer />-->
-
-      <!--<input type="radio" ng-model="measurement.am_pm" value="am" checked/> am-->
-      <!--<input type="radio" ng-model="measurement.am_pm" value="pm" /> pm-->
-
-      <!--Value:-->
-      <!-- fixme: use smart-float here: http://docs.angularjs.org/guide/forms -->
-      <!--<input type='number' ng-model='measurement.value' name='mValue' min='0' max='500' integer />-->
-      <!--&nbsp;-->
-      <!--<input type="radio" ng-model="measurement.unit" value="mg_dl" checked/>mg/dL<br />-->
-      <!--<input type="radio" ng-model="measurement.unit" value="mmol_per_l" />mmol/L-->
-      <!--&nbsp;-->
-      <!--<input type="radio" ng-model="measurement.type" value="whole_blood" checked/>whole blood-->
-      <!--<input type="radio" ng-model="measurement.type" value="plasma" />plasma<br />-->
-      <!--<br>-->
-      <!--Note:-->
-      <!--<input type="textarea" ng-model="measurement.note" name="mNote"/>-->
-
-      <!--<br />-->
-      <!--<br />-->
-
-      <!--<button ng-click="reset()" ng-disabled="isUnchanged(user)">Reset Form</button>-->
-      <!--<button ng-click="update(user)"-->
-              <!--ng-disabled="form.$invalid || isUnchanged(user)">Save Measurement</button>-->
-    <!--</form>-->
 
     <h3>Previous Measurements</h3>
     <div>
       <ul>
-        <li ng-repeat="glucose in glucoses">
-          {[{ glucose.when }]} {[{ glucose.value }]} mmol/L
-        </li>
+        <li ng-repeat="glucose in glucoses"><code>{[{ glucose.when }]} {[{ glucose.value }]} mmol/L</code></li>
       </ul>
     </div>
   </div>
-
 
 
   <!-- FIXME: hackish passing of wctoken from django to angular -->
@@ -88,5 +88,9 @@
   <script src="js/app.js"></script>
   <script src="js/controllers.js"></script>
   <script src="js/directives.js"></script>
+  <style type="text/css">
+    .css-form input.ng-invalid.ng-dirty { background-color: #FA787E; }
+    .css-form input.ng-valid.ng-dirty { background-color: #78FA89; }
+  </style>
 </body>
 </html>
