@@ -61,7 +61,11 @@ def main(request):
 
     template_values = {
         'wctoken': wctoken,
-        'name': hvconn.person.name
+        'name': hvconn.person.name,
+        'person_id': hvconn.person.person_id,
+        'selected_record_id': hvconn.person.selected_record_id,
+        'auth_token': hvconn._auth_token,
+        'shared_secret': hvconn._shared_secret
     }
     return render_to_response('main.html', template_values)
 
@@ -78,7 +82,11 @@ def getWeightMeasurements(request):
     return HttpResponse(json.dumps(res), mimetype='application/json')
 
 def getGlucoseMeasurements(request):
-    hvconn = HVConn(request.GET['wctoken'])
+    hvconn = HVConn(user_auth_token=request.GET['wctoken'],
+                    record_id=request.GET['record_id'],
+                    auth_token=request.GET['auth_token'],
+                    shared_secret=request.GET['shared_secret'],
+                    get_person_info_p=False)
     hvconn.getGlucoseMeasurements()
     res = hvconn.person.glucoses
     return HttpResponse(json.dumps(res), mimetype='application/json')

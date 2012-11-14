@@ -8,12 +8,9 @@ function Controller($scope, $http) {
 
   $scope.update = function(measurement) {
     $scope.master = angular.copy(measurement);
-    measurement['wctoken'] = window.WCTOKEN;
+    measurement['wctoken'] = sessionStorage.getItem('wctoken');
     $http.post('/newGlucoseMeasurement', measurement)
-      .success(function(data) {
-        // FIXME: slow as hell
-        $scope.get_glucoses();
-      })
+      .success(function(data) { $scope.get_glucoses(); })
   };
 
   $scope.is_unchanged = function(measurement) {
@@ -38,6 +35,7 @@ function Controller($scope, $http) {
   };
 
   $scope.get_glucoses = function() {
+    // so we don't have to re-auth
     $http.get('/getGlucoseMeasurements', {params: $scope.params})
           .success(function(data) {
             // todo: have a consistent standard for this array or {}}?
@@ -51,8 +49,13 @@ function Controller($scope, $http) {
   }
 
   // main init
-  $scope.params = {'wctoken': window.WCTOKEN};
-  $scope.name = window.NAME;
+  $scope.params = {
+    'wctoken': sessionStorage.getItem('wctoken'),
+    'auth_token': sessionStorage.getItem('auth_token'),
+    'shared_secret': sessionStorage.getItem('shared_secret'),
+    'record_id': sessionStorage.getItem('record_id')
+  };
+  $scope.name = sessionStorage.getItem('name');
 
   if ($scope.DEBUG) {
     $scope.glucoses = [
