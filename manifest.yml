@@ -1,0 +1,14 @@
+--- 
+applications: 
+  .: 
+    infra: aws
+    framework: 
+      info: 
+        exec: 
+        mem: 64M
+        description: Python WSGI Application
+      name: wsgi
+    mem: 64M
+    name: smart-hv-patient
+    url: ${name}.${target-base}
+    instances: 1

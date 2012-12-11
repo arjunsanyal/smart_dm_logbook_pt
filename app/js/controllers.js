@@ -2,15 +2,13 @@
 
 function Controller($scope, $http) {
   $scope.DEBUG = false;
-
-  // form functions
   $scope.master = {};
 
   $scope.update = function(measurement) {
     $scope.master = angular.copy(measurement);
     measurement['wctoken'] = sessionStorage.getItem('wctoken');
     $http.post('/newGlucoseMeasurement', measurement)
-      .success(function(data) { $scope.get_glucoses(); })
+         .success(function(data) { $scope.get_glucoses(); })
   };
 
   $scope.is_unchanged = function(measurement) {
@@ -35,15 +33,14 @@ function Controller($scope, $http) {
   };
 
   $scope.get_glucoses = function() {
-    // so we don't have to re-auth
     $http.get('/getGlucoseMeasurements', {params: $scope.params})
-          .success(function(data) {
-            // todo: have a consistent standard for this array or {}}?
-            var glucoses = [];
-            data.forEach(function(d) {
-              glucoses.push({'when': d[0], 'value': d[1]});
-            })
-            $scope.glucoses = glucoses;
+         .success(function(data) {
+           // todo: have a consistent standard for this array or {}}?
+           var glucoses = [];
+           data.forEach(function(d) {
+             glucoses.push({'when': d[0], 'value': d[1]});
+           })
+           $scope.glucoses = glucoses;
           })
           .error(function(data, status) { alert('error in getGlucoseMeasurements'); })
   }

@@ -8,6 +8,49 @@ Josh Mandel  <Joshua.Mandel@childrens.harvard.edu>
 The patient-facing app of the SMART + Microsoft HealthVault "Merge"
 project.
 
+
+########### Do NOW
+
+- FIX export script for new location
+
+
+
+
+
+
+
+
+
+
+
+# FIXME: porting to flask (0.8.1) for appfog deployment #
+
+# AppFog - Flask deployment notes
+
+- added requirements.txt from af flask github repo only added flask==0.8
+  line (not mymongo line)
+- copied their wsgi.py script verbatim
+- "af push"
+- works!!! "welcome to appfog"
+
+
+
+# angular seed
+
+- app, config, logs, scripts, test dirs from angular-seed
+
+- manifest.yml, requirements.txt from AF
+
+
+
+
+
+
+
+
+---
+
+
 FIXME: update this
 
 - Requires the `healthvault.py` library as a submodule
