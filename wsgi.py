@@ -1,42 +1,27 @@
-#!/usr/bin/env python
-from settings import *
+
 import datetime
 import flask
 import json
 import os
 import pdb
 import platform
+import settings
 import sys
 
-# FIXME: lame submodule import
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-git_sub_modules = BASE_DIR+'/healthvault' # Relative paths ok too
-for dir in os.listdir(git_sub_modules):
-    path = os.path.join(git_sub_modules, dir)
-    if not path in sys.path:
-        sys.path.append(path)
+sys.path.append(BASE_DIR+'/healthvault/healthvault')
+import healthvault
 
-from healthvault import HVConn
-
-# Are we running on AppFog? (imprecise)
-AF_P = False
-AF_PLATFORM = 'Linux-3.2.0-23-virtual-x86_64-with-Ubuntu-12.04-precise'
-if platform.platform() == AF_PLATFORM:
-    AF_P = True
-    SERVER_NAME = 'smart-hv-patient.aws.af.cm'
-else:
-    SERVER_NAME = 'localhost'
-
-# Note: using ./app for both the templates and static files
-# AF needs "application" here
+# Some PaaS (including AppFog) need application here
 application = app = flask.Flask(
     'wsgi',
-    static_folder='app',
+    static_folder='app', # use ./app for templates and static files
     static_url_path='/static',
     template_folder='app'
 )
 app.debug = True
-app.config['SERVER_NAME'] = SERVER_NAME
+app.config['SERVER_NAME'] = settings.SERVER_NAME
+
 
 # Routes
 @app.route('/')
@@ -57,7 +42,7 @@ def mvaultaction():
         if not wctoken:
             return "Couldn't get wctoken from HealthVault! Aborting."
 
-        hvconn = HVConn(wctoken)
+        hvconn = healthvault.HVConn(wctoken)
 
         return flask.render_template(
             'main.html',
@@ -78,7 +63,7 @@ def mvaultaction():
 @app.route('/getGlucoseMeasurements')
 def getGlucoseMeasurements():
     g = flask.request.args.get
-    hvconn = HVConn(user_auth_token=g('wctoken'),
+    hvconn = healthvault.HVConn(user_auth_token=g('wctoken'),
                     record_id=g('record_id'),
                     auth_token=g('auth_token'),
                     shared_secret=g('shared_secret'),
@@ -95,7 +80,7 @@ def getGlucoseMeasurements():
 def newGlucoseMeasurement():
     pass
     #params = json.loads(request.raw_post_data)
-    #hvconn = HVConn(params['wctoken'])
+    #hvconn = healthvault.HVConn(params['wctoken'])
     #dt = datetime.datetime(
             #params['year'],
             #params['month'],

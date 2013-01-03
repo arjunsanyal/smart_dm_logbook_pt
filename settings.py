@@ -1,3 +1,8 @@
+
+# Set this to your app's FQDN
+# SERVER_NAME = 'smart-hv-patient.aws.af.cm'
+SERVER_NAME = 'localhost'
+
 # App configuration (see README for details)
 # You will need to change these
 APP_ID = '3bdc36a7-730f-4532-845b-224fa64a17aa'
