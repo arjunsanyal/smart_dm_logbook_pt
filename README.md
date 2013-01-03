@@ -1,17 +1,19 @@
 
-SMART Glucose Logbook Patient App
-=================================
+
+SMART Glucose Logbook: Patient App
+==================================
 
 Arjun Sanyal <arjun.sanyal@childrens.harvard.edu>
-Josh Mandel  <Joshua.Mandel@childrens.harvard.edu>
+Josh Mandel  <joshua.mandel@childrens.harvard.edu>
 
-This is the SMART patient-facing glucose logbook app. It runs as a
-standalone Python WSGI app and includes metadata to make running on
-[AppFog][] simple but it can be run easily on other systems. It
-integrates with Microsoft [HealthVault][] for authentication and storage
-of the patient's personal health data via the `healthvault_py` Python
-library included as a git submodule. Both reading and writing of data to
-the patient's HealthVault account is supported.
+This is the patient-facing SMART Glucose Logbook App. It runs as a
+standalone Python WSGI app and also includes metadata to make running on
+[AppFog][] simple, but it can be run easily on other cloud hosting
+systems. It integrates with Microsoft [HealthVault][] for patient
+authentication and for storage of the patient's personal health data via
+the `healthvault_py` Python library which included as a git submodule.
+Both reading and writing of data to the patient's HealthVault account is
+supported.
 
 The app is written with the support of the [AngularJS][] "framework" and
 the code is organized using a stripped-down version of the
