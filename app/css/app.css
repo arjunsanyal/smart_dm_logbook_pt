@@ -70,7 +70,7 @@ strong {
 /* Adjust header sizes */
 h1 { color: #696969; font-size: 24px; margin-top: 12px; }
 h2 { color: #696969; font-size: 20px; margin-top: 36px; }
-h3 { color: #5f5f5f; font-size: 14px; font-variant: small-caps; text-transform: uppercase; margin-top: 22px;}
+h3 { color: #5f5f5f; font-size: 18px; font-variant: small-caps; text-transform: uppercase; margin-top: 22px;}
 
 #left_nav {
   margin-top: 28px;
@@ -85,7 +85,7 @@ h3 { color: #5f5f5f; font-size: 14px; font-variant: small-caps; text-transform: 
   margin: 0 auto 14px auto;
 }
 
-.whitebg { background-color: #fff; }
+.vizbox { height: 500px; width: 960px; background-color: #fff; border: 1px solid #ddd }
 
 .nav { font-size: 14px !important; }
 

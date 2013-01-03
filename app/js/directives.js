@@ -19,13 +19,13 @@ angular.module('App.directives', [])
       }
     };
   })
+  // based on the mbostock's scatterplot http://bl.ocks.org/3887118
   .directive('glucoseDay', function() {
     return {
       restrict: 'E',
       terminal: true,
       scope: { val: '=' },
       link: function (scope, element, attrs) {
-        // http://bl.ocks.org/3887118
         function getDate(d) { return new Date(d); }
         function getHour(d) {
           var x = new Date(d)
@@ -36,9 +36,13 @@ angular.module('App.directives', [])
         var margin = {top: 20, right: 20, bottom: 30, left: 40},
             width = 960 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
+
         var x = d3.scale.linear().domain([0, 24]).range([0, width]).nice();
+
         var y = d3.scale.linear().range([height, 0]);
+
         var color = d3.scale.category10();
+
         var xAxis = d3.svg.axis().scale(x).orient("bottom");
         var yAxis = d3.svg.axis().scale(y).orient("left");
 
