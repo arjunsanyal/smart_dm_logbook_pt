@@ -9,13 +9,13 @@ import settings
 import sys
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR+'/healthvault/healthvault')
+sys.path.append(BASE_DIR + '/healthvault/healthvault')
 import healthvault
 
 # Some PaaS (including AppFog) need application here
 application = app = flask.Flask(
     'wsgi',
-    static_folder='app', # use ./app for templates and static files
+    static_folder='app',  # use ./app for templates and static files
     static_url_path='/static',
     template_folder='app'
 )
@@ -28,14 +28,19 @@ app.config['SERVER_NAME'] = settings.SERVER_NAME
 def redirect_to_hv_login():
     # Note: redirect in qs is only for non-production use
     # only otherwise action_url in app metadata is used
-    return flask.redirect(settings.HV_SHELL_URL +
-             "/redirect.aspx?target=AUTH&targetqs=?appid=" +
-             settings.APP_ID + "%26redirect=http://"+app.config['SERVER_NAME'] +
-             "/mvaultaction")
+    return flask.redirect(
+        settings.HV_SHELL_URL +
+        "/redirect.aspx?target=AUTH&targetqs=?appid=" +
+        settings.APP_ID +
+        "%26redirect=http://" +
+        app.config['SERVER_NAME'] +
+        "/mvaultaction"
+    )
+
 
 @app.route('/mvaultaction')
 def mvaultaction():
-    target = flask.request.args.get('target','')
+    target = flask.request.args.get('target', '')
     if target == 'AppAuthSuccess':
         args = flask.request.args
         wctoken = args.get('wctoken', '')
@@ -60,34 +65,42 @@ def mvaultaction():
     #if target == "Home":
         #return HttpResponseRedirect('/')
 
+
 @app.route('/getGlucoseMeasurements')
 def getGlucoseMeasurements():
     g = flask.request.args.get
-    hvconn = healthvault.HVConn(user_auth_token=g('wctoken'),
-                    record_id=g('record_id'),
-                    auth_token=g('auth_token'),
-                    shared_secret=g('shared_secret'),
-                    get_person_info_p=False)
+    hvconn = healthvault.HVConn(
+        user_auth_token=g('wctoken'),
+        record_id=g('record_id'),
+        auth_token=g('auth_token'),
+        shared_secret=g('shared_secret'),
+        get_person_info_p=False
+    )
+
     hvconn.getGlucoseMeasurements()
-    # don't use flask's builtin jsonify function... it creates
-    # one big dict not an array for these
+
+    # Don't use flask's builtin jsonify function; we want an array
     resp = flask.make_response()
     resp.data = json.dumps(hvconn.person.glucoses)
     resp.mimetype = 'application/json'
     return resp
 
-@app.route('/newGlucoseMeasurement')
+
+@app.route('/newGlucoseMeasurement', methods=['POST'])
 def newGlucoseMeasurement():
     pass
+    #import pdb; pdb.set_trace();
+
     #params = json.loads(request.raw_post_data)
     #hvconn = healthvault.HVConn(params['wctoken'])
     #dt = datetime.datetime(
-            #params['year'],
-            #params['month'],
-            #params['day'],
-            #params['hours24'],
-            #params['minutes'],
-            #0)
+        #params['year'],
+        #params['month'],
+        #params['day'],
+        #params['hours24'],
+        #params['minutes'],
+        #0
+    #)
 
     ## convert mg_dl to mmolPerL
     #if params['unit'] == 'mg_dl':
@@ -97,6 +110,7 @@ def newGlucoseMeasurement():
 
     #hvconn.newGlucoseMeasurement(dt, value, params['whole_or_plasma'])
     #return HttpResponse(json.dumps('ok'), mimetype='application/json')
+
 
 # Run on port 80 for consistency with AF
 if __name__ == '__main__':
