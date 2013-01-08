@@ -88,28 +88,34 @@ def getGlucoseMeasurements():
 
 @app.route('/newGlucoseMeasurement', methods=['POST'])
 def newGlucoseMeasurement():
-    pass
-    #import pdb; pdb.set_trace();
+    # flask.request.form is empty, but we have .data (string) and .json
+    g = flask.request.json
+    hvconn = healthvault.HVConn(user_auth_token=g['wctoken'])
+    dt = datetime.datetime(
+        g['year'],
+        g['month'],
+        g['day'],
+        g['hours24'],
+        g['minutes'],
+        0
+    )
 
-    #params = json.loads(request.raw_post_data)
-    #hvconn = healthvault.HVConn(params['wctoken'])
-    #dt = datetime.datetime(
-        #params['year'],
-        #params['month'],
-        #params['day'],
-        #params['hours24'],
-        #params['minutes'],
-        #0
-    #)
+    # convert mg_dl to mmolPerL
+    if g['unit'] == 'mg_dl':
+        value = g['value'] / 18
+    else:
+        value = g['value']
 
-    ## convert mg_dl to mmolPerL
-    #if params['unit'] == 'mg_dl':
-        #value = params['value'] / 18
-    #else:
-        #value = params['value']
+    try:
+        hvconn.newGlucoseMeasurement(dt, value, g['whole_or_plasma'])
+    except:
+        app.logger.error('Coudn\'t post newGlucoseMeasurement!')
 
-    #hvconn.newGlucoseMeasurement(dt, value, params['whole_or_plasma'])
-    #return HttpResponse(json.dumps('ok'), mimetype='application/json')
+    # Don't use flask's builtin jsonify function; we want an array
+    resp = flask.make_response()
+    resp.data = json.dumps('ok')
+    resp.mimetype = 'application/json'
+    return resp
 
 
 # Run on port 80 for consistency with AF
