@@ -28,9 +28,9 @@ app.config['SERVER_NAME'] = settings.SERVER_NAME
 def redirect_to_hv_login():
     # Note: redirect in qs is only for non-production use
     # only otherwise action_url in app metadata is used
-    return flask.redirect(HV_SHELL_URL +
+    return flask.redirect(settings.HV_SHELL_URL +
              "/redirect.aspx?target=AUTH&targetqs=?appid=" +
-             APP_ID + "%26redirect=http://"+app.config['SERVER_NAME'] +
+             settings.APP_ID + "%26redirect=http://"+app.config['SERVER_NAME'] +
              "/mvaultaction")
 
 @app.route('/mvaultaction')
