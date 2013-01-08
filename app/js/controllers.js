@@ -18,7 +18,7 @@ function Controller($scope, $http) {
   $scope.reset = function() {
     var d = new Date();
     $scope.meas = {
-      'month': d.getMonth(),
+      'month': d.getMonth() + 1, // Mistakes were made: January is month 0!
       'day': d.getDate(),
       'year': d.getFullYear(),
       'hours24': d.getHours(),
