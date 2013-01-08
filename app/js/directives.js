@@ -94,38 +94,33 @@ angular.module('App.directives', [])
       }
     }
   })
-
+  // based on http://bl.ocks.org/3885304
   .directive('glucoseHistogram', function() {
     return {
       restrict: 'E',
       terminal: true,
       scope: { val: '=' },
       link: function (scope, element, attrs) {
-        // http://bl.ocks.org/3885304
         var margin = {top: 20, right: 20, bottom: 30, left: 40},
             width = 960 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
 
+        // create a custom x domain from 3 to 15
         var x_domain = [];
-        for (var i = 4; i < 15; i += 1) {
-          x_domain.push(i);
-          //for (var j = 0; j < 11; j += 1) {
-            //x_domain.push(i+j/10);
-          //}
-        }
-
+        for (var i = 3; i < 16; i += 1) { x_domain.push(i); }
         var x = d3.scale.quantize().domain(x_domain).range(x_domain);
         var y = d3.scale.linear().range([height, 0]);
         var color = d3.scale.category10();
         var yAxis = d3.svg.axis().scale(y).orient("left");
-        // aks hack for xAxis: NOTE: don't use .domain(x_domain) here!
-        var x_scale_hack = d3.scale.linear().domain([4,14]).range([0, 960]);
-        var xAxis = d3.svg.axis().scale(x_scale_hack).orient("bottom").tickValues(x_domain);
+
+        // the x_scale has a domain of 3 to 15 (n = 12) and a range of width - margins (900)
+        var x_scale = d3.scale.linear().domain([3,15]).range([0, 900]);
+        var xAxis = d3.svg.axis().scale(x_scale).orient("bottom").tickValues(x_domain);
 
         var svg = d3.select(element[0]).append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
-          .append("g")
+            .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         // angular listener
@@ -133,59 +128,70 @@ angular.module('App.directives', [])
           if (!newVal) { return; }
           svg.selectAll('*').remove();
 
-          // generate counts
+          // round values
+          var rounded = _.map(newVal, function(v) { return Math.round(v.value); });
+          rounded = _.sortBy(rounded, function(v) { return v; });
+
+          // generate counts based on rounded values
           var counts = [];
 
-          newVal.forEach(function(d) {
+          rounded.forEach(function(d) {
             var found = false;
             for (var i = 0; i < counts.length; i += 1) {
-              if (counts[i][0] === d.value) {
+              if (counts[i][0] === d) {
                 counts[i][1] = counts[i][1] + 1;
                 found = true;
               }
             }
-            if (!found) { counts.push([d.value, 1]); }
+            if (!found) { counts.push([d, 1]); }
           });
+
+          //console.log(counts);
 
           // set the y domain after we have the data to auto scale
           y.domain([0, d3.max(counts, function(d) { return d[1]; })]).nice();
-
-          //counts.forEach(function(d) {
-            //console.log('input: ', d, 'output: ', x(d[0]));
-            //console.log(x(d[0])*90-90);
-          //});
-
-          svg.append("g")
-              .attr("class", "x axis")
-              .attr("transform", "translate(0," + height + ")")
-              .call(xAxis)
-            .append("text")
-              .attr("class", "label")
-              .attr("x", width)
-              .attr("y", -6)
-              .style("text-anchor", "end")
-              .text("Glucose (mmol/L)");
+          // use the domain to set the ticks
+          var y_ticks = _.range(0, y.domain()[1]+1);
+          //console.log(y_ticks);
+          var yAxis = d3.svg.axis().scale(y).orient("left").tickValues(y_ticks).tickFormat(d3.format("0d"));
 
           svg.append("g")
-                  .attr("class", "y axis")
-                  .call(yAxis)
-                .append("text")
-                  .attr("class", "label")
-                  .attr("transform", "rotate(-90)")
-                  .attr("y", 6)
-                  .attr("dy", ".71em")
-                  .style("text-anchor", "end")
-                  .text("Number of Measurements")
+               .attr("class", "x axis")
+               .attr("transform", "translate(0," + height + ")")
+               .call(xAxis)
+             .append("text")
+               .attr("class", "label")
+               .attr("x", width)
+               .attr("y", -6)
+               .style("text-anchor", "end")
+               .text("Glucose (mmol/L)");
+
+          svg.append("g")
+               .attr("class", "y axis")
+               .call(yAxis)
+             .append("text")
+               .attr("class", "label")
+               .attr("transform", "rotate(-90)")
+               .attr("y", 6)
+               .attr("dy", ".71em")
+               .style("text-anchor", "end")
+               .text("Number of Measurements")
 
             svg.selectAll(".bar")
-                .data(counts)
-              .enter().append("rect")
-                .attr("class", "bar")
-                .attr("width", 90)
-                // todo: clean up this adjustment
-                .attr("x", function(d) { return (x(d[0]) * 90 - (360 + 30)); })
-                .attr("y", function(d) { return y(d[1]); })
-                .attr("height", function(d) { return height - y(d[1]); });
+               .data(counts)
+               .enter()
+               .append("rect")
+               .attr("class", "bar")
+               .attr("width", 75)
+               .attr("x", function(d) {
+                 var a = d[0];
+                 // x value * bar width - (x value of 3.5 + half bar width)
+                 var b = x(a) * 75 - (225 + 37.5)
+                 //console.log(a, x(a), b);
+                 return b;
+               })
+               .attr("y", function(d) { return y(d[1]); })
+               .attr("height", function(d) { return height - y(d[1]); });
         });
       }
     }
