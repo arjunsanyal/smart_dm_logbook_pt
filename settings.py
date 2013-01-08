@@ -1,4 +1,7 @@
 
+# global DEBUG boolean for the app and healthvault.py
+DEBUG = True
+
 # Set this to your app's FQDN
 # SERVER_NAME = 'smart-hv-patient.aws.af.cm'
 SERVER_NAME = 'localhost'
