@@ -7,6 +7,14 @@ function Controller($scope, $http) {
   $scope.update = function(measurement) {
     $scope.master = angular.copy(measurement);
     measurement['wctoken'] = sessionStorage.getItem('wctoken');
+
+    // convert the 12 hour value to 24 hour
+    if (measurement['am_or_pm'] == 'pm') {
+      measurement['hours24'] = measurement['hours'] + 12;
+    } else {
+      measurement['hours24'] = measurement['hours'];
+    }
+
     $http.post('/newGlucoseMeasurement', measurement)
          .success(function(data) { $scope.get_glucoses(); })
   };
@@ -25,7 +33,6 @@ function Controller($scope, $http) {
       'hours': d.getHours() > 12 ? d.getHours() - 12 : d.getHours(),
       'am_or_pm': d.getHours() > 12 ? 'pm' : 'am',
       'minutes': d.getMinutes(),
-      '12_hour_p': true,
       'unit': 'mmol_per_l',
       'whole_or_plasma': 'whole',
       'value': $scope.DEBUG ? 7.5 : null,
@@ -53,30 +60,7 @@ function Controller($scope, $http) {
     'record_id': sessionStorage.getItem('record_id')
   };
   $scope.name = sessionStorage.getItem('name');
-
-  if ($scope.DEBUG) {
-    $scope.glucoses = [
-          {'when': '2012-10-23T08:04:11', 'value': 6.5},
-          {'when': '2012-10-23T18:04:11', 'value': 7.9},
-          {'when': '2012-10-22T08:04:11', 'value': 5.8},
-          {'when': '2012-10-22T18:04:11', 'value': 7.0},
-          {'when': '2012-10-21T08:04:11', 'value': 5.9},
-          {'when': '2012-10-21T18:04:11', 'value': 6.5},
-          {'when': '2012-10-20T08:04:11', 'value': 6.8},
-          {'when': '2012-10-20T18:04:11', 'value': 5.3},
-          {'when': '2012-10-19T08:04:11', 'value': 6.5},
-          {'when': '2012-10-19T18:04:11', 'value': 5.2},
-          {'when': '2012-10-18T08:04:11', 'value': 7.6},
-          {'when': '2012-10-18T18:04:11', 'value': 8.1},
-          {'when': '2012-10-17T08:04:11', 'value': 6.5},
-          {'when': '2012-10-17T18:04:11', 'value': 5.8},
-          {'when': '2012-10-16T08:04:11', 'value': 6.4},
-          {'when': '2012-10-16T18:04:11', 'value': 7.9},
-        ]
-    } else {
-      $scope.get_glucoses();
-    }
-
+  $scope.get_glucoses();
   $scope.reset();
 };
 
