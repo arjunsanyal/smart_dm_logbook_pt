@@ -1,10 +1,16 @@
 
 # global DEBUG boolean for the app and healthvault.py
-DEBUG = True
+# Change for deployment or Flask won't run on 0.0.0.0!
+# DEBUG = True
+DEBUG = False
 
 # Set this to your app's FQDN
 # SERVER_NAME = 'smart-hv-patient.aws.af.cm'
+# SERVER_NAME = 'abbi.smartplatforms.org'
 SERVER_NAME = 'localhost'
+
+# PORT = 80
+PORT = 5000
 
 # App configuration (see README for details)
 # You will need to change these

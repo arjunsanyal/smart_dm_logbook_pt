@@ -12,6 +12,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR + '/healthvault/healthvault')
 import healthvault
 
+app.debug = settings.DEBUG
+
 # Some PaaS (including AppFog) need application here
 application = app = flask.Flask(
     'wsgi',
@@ -19,8 +21,6 @@ application = app = flask.Flask(
     static_url_path='/static',
     template_folder='app'
 )
-app.debug = True
-app.config['SERVER_NAME'] = settings.SERVER_NAME
 
 
 # Routes
@@ -33,7 +33,9 @@ def redirect_to_hv_login():
         "/redirect.aspx?target=AUTH&targetqs=?appid=" +
         settings.APP_ID +
         "%26redirect=http://" +
-        app.config['SERVER_NAME'] +
+        settings.SERVER_NAME +
+        ":" +
+        str(settings.PORT) +
         "/mvaultaction"
     )
 
@@ -118,6 +120,5 @@ def newGlucoseMeasurement():
     return resp
 
 
-# Run on port 80 for consistency with AF
 if __name__ == '__main__':
-    app.run(port=80)
+    app.run(host='0.0.0.0', port=settings.PORT)
