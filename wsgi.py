@@ -12,7 +12,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR + '/healthvault/healthvault')
 import healthvault
 
-app.debug = settings.DEBUG
 
 # Some PaaS (including AppFog) need application here
 application = app = flask.Flask(
@@ -21,6 +20,7 @@ application = app = flask.Flask(
     static_url_path='/static',
     template_folder='app'
 )
+app.debug = settings.DEBUG
 
 
 # Routes
