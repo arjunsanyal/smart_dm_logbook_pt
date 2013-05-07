@@ -1,7 +1,5 @@
 
-
-SMART Glucose Logbook: Patient App
-==================================
+# SMART Glucose Logbook: Patient App
 
 Arjun Sanyal <arjun.sanyal@childrens.harvard.edu>
 Josh Mandel  <joshua.mandel@childrens.harvard.edu>
@@ -9,7 +7,7 @@ Josh Mandel  <joshua.mandel@childrens.harvard.edu>
 This is the patient-facing SMART Glucose Logbook App. It runs as a
 standalone Python WSGI app and also includes metadata to make running on
 [AppFog][] simple, but it can be run easily on other cloud hosting
-systems. It integrates with Microsoft [HealthVault][] for patient
+platforms. It integrates with Microsoft [HealthVault][] for patient
 authentication and for storage of the patient's personal health data via
 the `healthvault_py` Python library which included as a git submodule.
 Both reading and writing of data to the patient's HealthVault account is
@@ -27,19 +25,19 @@ the [D3][] JavaScript visualization and interaction library.
 [D3]: http://d3js.org
 
 
-TODO
-----
+## TODO
+
 - Document HealthVault setup
 
 
-Directory Structure
--------------------
+## Directory Structure
+
 - The /app, /config, /logs, /scripts, /test directories are from
   <https://github.com/angular/angular-seed>
 
 
-AppFog Setup
-------------
+## AppFog Setup
+
 - `requirements.txt`
   - This file describes the dependecies (including versions) for this
     app. Without it AppFog's virtual server's wouldn't have the
@@ -54,8 +52,8 @@ AppFog Setup
   - Change the file for your preferred settings
 
 
-Running Locally
----------------
+## Running Locally
+
 You must have root permissions to run the app locally since it is
 configured by default to listen on port 80. You can change this in the
 `wsgi.py` script. To start on localhost port 80:
@@ -63,8 +61,8 @@ configured by default to listen on port 80. You can change this in the
     $ sudo python wsgi.py
 
 
-Running on AppFog
------------------
+## Running on AppFog
+
 Assuming you have the AppFog commadline app installed and are logged in
 using it, updating and starting the app should be simply:
 
